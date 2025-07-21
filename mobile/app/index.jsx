@@ -29,5 +29,6 @@ const styles = StyleSheet.create({
   heading: {
     fontSize: 40,
     color: "red",
+    borderColor: "white",
   },
 });
