@@ -2,12 +2,28 @@ import express from "express";
 import dotenv from "dotenv";
 // import { sql } from "./config/db.js";
 import { PrismaClient } from "@prisma/client";
+import rateLimiter from "./middleware/rateLimiter.js";
 
 dotenv.config();
 const prisma = new PrismaClient();
 
 const app = express();
 const PORT = process.env.PORT || 5001; //this val would be undefined until dotenv.config();
+
+//MIDDLEWARE
+//built in middleware- func that runs between req and response
+
+app.use((req, res, next) => {
+  const userId = req.headers["x-user-id"];
+  if (userId) {
+    req.userId = userId;
+  }
+  next();
+});
+//limits number of user requests
+app.use(rateLimiter);
+//parses incoming json request bodies into req.body
+app.use(express.json());
 
 async function startServer() {
   try {
@@ -37,9 +53,6 @@ async function initDB() {
     process.exit(1); //status code 1 means failure, 0 means success
   }
 }
-//built in middleware- func that runs between req and response
-//parses incoming json request bodies into req.body
-app.use(express.json());
 
 //Adds data to transactions table in db
 app.post("/api/transactions", async (req, res) => {
@@ -196,7 +209,7 @@ app.get("/api/transactions/summary/:userId", async (req, res) => {
 
 startServer();
 
-//429 is too many req
+//status code 429 is too many req
 
 // initDB().then(() => {
 //   app.listen(PORT, () => {
