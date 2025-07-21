@@ -8,10 +8,6 @@ import {
 
 const router = express.Router();
 
-router.get("/", (req, res) => {
-  res.send("it's working now");
-});
-
 //Adds data to transactions table in db
 router.post("/", createTransaction);
 router.get("/summary/:userId", getUserTransactionSummary);

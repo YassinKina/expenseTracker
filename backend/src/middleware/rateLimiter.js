@@ -24,7 +24,6 @@ async function getUniqueUserKey(req) {
   // fallback: use IP if no user ID available
   const ip =
     req.headers["x-forwarded-for"] || req.connection.remoteAddress || "unknown";
-  console.log("Using ip:", ip);
   return `ratelimit_ip_${ip}`;
   //get the user's id
 }
