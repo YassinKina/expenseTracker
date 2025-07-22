@@ -1,6 +1,15 @@
-import { Stack } from "expo-router";
+import SafeScreen from "@/components/SafeScreen";
+import { ClerkProvider } from "@clerk/clerk-expo";
+import { Slot } from "expo-router";
+import { tokenCache } from "@clerk/clerk-expo/token-cache";
 
 export default function RootLayout() {
   // Almost always want this, helps with routing
-  return <Stack />;
+  return (
+    <ClerkProvider tokenCache={tokenCache}>
+      <SafeScreen>
+        <Slot />
+      </SafeScreen>
+    </ClerkProvider>
+  );
 }
