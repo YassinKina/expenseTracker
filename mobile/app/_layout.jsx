@@ -8,7 +8,8 @@ export default function RootLayout() {
   return (
     <ClerkProvider tokenCache={tokenCache}>
       <SafeScreen>
-        <Slot />
+        <Slot /> 
+        {/* slot renders the currently selected content */}
       </SafeScreen>
     </ClerkProvider>
   );

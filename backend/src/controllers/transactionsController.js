@@ -15,9 +15,6 @@ export async function getTransactionsByUserId(req, res) {
       },
     });
 
-    // const transactions = await sql`
-    // SELECT * FROM transactions WHERE user_id = ${userId} ORDER BY created_at DESC
-    // `;
     res.status(200).json(transactions);
   } catch (error) {
     console.error("Error getting the transactions:", error);
@@ -40,12 +37,6 @@ export async function createTransaction(req, res) {
         category,
       },
     });
-
-    // const transaction = await sql`
-    // INSERT INTO transactions(user_id,title,amount,category)
-    // VALUES (${user_id},${title},${amount},${category})
-    // RETURNING *
-    // `;
 
     console.log(Object.values(transaction));
     res.status(201).json(transaction);
@@ -73,9 +64,6 @@ export async function deleteTransaction(req, res) {
         id: idInt,
       },
     });
-    // const result =
-    //   await sql`DELETE FROM transactions WHERE id = ${id} RETURNING *
-    // `;
 
     if (deletedTransacation.length == 0) {
       return res.status(404).json({ message: "Transaction not found" });
