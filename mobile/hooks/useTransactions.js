@@ -2,8 +2,7 @@
 
 import { useCallback, useState } from "react";
 import { Alert } from "react-native";
-
-const API_URL = "http://localhost:5001/api";
+import { API_URL } from "../constants/api";
 
 export const useTransactions = (userId) => {
   const [transactions, setTransactions] = useState([]);
@@ -12,7 +11,7 @@ export const useTransactions = (userId) => {
     income: 0,
     expenses: 0,
   });
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
   //usecallback is used for performance reasons
   //it will memoize the func
@@ -30,7 +29,14 @@ export const useTransactions = (userId) => {
   const fetchSummary = useCallback(async () => {
     try {
       const response = await fetch(`${API_URL}/transactions/summary/${userId}`);
+
+      //   const contentType = response.headers.get("content-type");
+      //   console.log("Response status:", response.status);
+      //   console.log("Content-Type:", contentType);
+
+      //   console.log("response:", response);
       const data = await response.json();
+
       setSummary(data);
     } catch (error) {
       console.error("Error fetching transactions:", error);
@@ -54,7 +60,7 @@ export const useTransactions = (userId) => {
 
   const deleteTransaction = async (id) => {
     try {
-      const response = fetch(`${API_URL}/transactions/${id}`, {
+      const response = await fetch(`${API_URL}/transactions/${id}`, {
         method: "DELETE",
       });
       if (!response.ok) throw new Error("failed to delete transaction");
@@ -63,6 +69,7 @@ export const useTransactions = (userId) => {
       loadData();
       Alert.alert("Succes", "Transaction deleted successfully");
     } catch (error) {
+      console.error("Error deleting transaction:", error);
       console.error("Error deleting transaction:", error);
       Alert.alert("Error:", error.messsage);
     }

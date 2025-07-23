@@ -3,7 +3,10 @@ import { Redirect } from "expo-router";
 import { Stack } from "expo-router/stack";
 
 export default function Layout() {
-  const { isSignedIn } = useUser();
+  const { isSignedIn, isLoaded } = useUser();
+
+  //Prevents sign in page from being show briefly even when we are already logged in
+  if (!isLoaded) return null;
 
   if (!isSignedIn) return <Redirect href={"/sign-in"} />;
 

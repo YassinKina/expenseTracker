@@ -3,10 +3,15 @@ import dotenv from "dotenv";
 import rateLimiter from "./middleware/rateLimiter.js";
 import transactionsRoute from "./routes/transactionsRoute.js";
 import prisma from "./config/db.js";
+import job from "./config/cron.js";
 
 dotenv.config();
 
 const app = express();
+
+//Send api req every 14 min to keep server deployed
+if (process.env.NODE_ENV === "production") job.start();
+
 const PORT = process.env.PORT || 5001; //this val would be undefined until dotenv.config();
 
 //MIDDLEWARE
@@ -27,9 +32,9 @@ app.use(express.json());
 app.use("/api/transactions", transactionsRoute);
 // app.use("api/products", productsRoute) -> productsRoute.js
 
-// app.get("/health-check", (req, res) => {
-//   res.send("it's working nowwwww");
-// });
+app.get("/api/health", (req, res) => {
+  res.status(200).json({ status: "ok" });
+});
 
 async function startServer() {
   try {
